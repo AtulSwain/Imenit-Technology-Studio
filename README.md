@@ -3,38 +3,52 @@ IMENIT Technologies represents innovation, precision, and digital excellence. It
 
 ## Website
 
-A static, black-and-white studio website with a live 3D background.
+A black-and-white studio website with a live 3D background, built with:
 
-```
-index.html      page markup (all sections)
-css/style.css   design tokens, layout, hover/transition effects
-js/scene.js     WebGL space: chrome Möbius ribbon, orbits, star field
-js/main.js      smooth scroll, preloader, text effects, scroll choreography
-```
+- **React 19** + **TypeScript**, bundled with **Vite 8**
+- **React Three Fiber 9** + **drei** + **Three.js** for the WebGL scene
+- **GSAP 3** (ScrollTrigger, `@gsap/react`) for animation
+- **Lenis** for smooth scrolling
 
-### Run locally
-
-No build step. Serve the folder with any static server:
+### Run
 
 ```bash
-python3 -m http.server 8000
-# open http://localhost:8000
+npm install
+npm run dev       # local dev server
+npm run build     # type-check + production build into dist/
+npm run preview   # serve the production build
 ```
 
-Deploy by uploading the folder to any static host (GitHub Pages, Vercel, Netlify).
-Libraries (GSAP + ScrollTrigger, Lenis, Three.js) load from public CDNs.
+`dist/` is a static site: deploy it to Vercel, Netlify, GitHub Pages or any static host.
+
+### Structure
+
+```
+src/
+  App.tsx                 page shell, preloader, menu, smooth anchor links
+  components/             one file per section (Hero, Services, Work, ...)
+    ScrollDirector.tsx    page-wide scroll motion + 3D choreography
+  scene/                  React Three Fiber scene (lazy-loaded)
+    SpaceCanvas.tsx       canvas, studio lighting, camera rig, drag-to-spin
+    Ribbon.tsx            flowing chrome Möbius ribbon
+    Orbits.tsx, StarField.tsx
+  lib/
+    content.ts            ALL site copy + 3D pose per section — edit here
+    smoothScroll.ts, gsap.ts, scramble.ts, sceneState.ts
+  styles/global.css       design tokens and styles
+```
 
 ### Highlights
 
-- **Moving 3D background**: a twisted chrome ribbon that flows continuously, follows the mouse,
-  can be **dragged and spun** in the hero, speeds up and ripples with scroll speed, and glides to a new
-  position for every section. Stars warp forward when you scroll fast.
-- Preloader with counter, character-by-character headline reveal, rotating word, scrambling text on hover.
+- **Moving 3D background**: a twisted chrome ribbon that keeps flowing, follows the mouse,
+  can be **dragged and spun** in the hero, ripples with scroll speed and glides to a new pose for
+  every section. Stars warp forward when you scroll fast. The scene is code-split and loads behind the preloader.
+- Preloader counter, character-by-character headline, rotating word, scrambling text on hover.
 - Custom cursor with labels, magnetic buttons, spotlight + 3D tilt cards, draggable services slider.
-- Scroll-filled statement text, counting stats, pinned horizontal "Work" gallery, cursor-following blog previews.
-- Respects `prefers-reduced-motion`; falls back to a static page if scripts can't load.
+- Scroll-filled statement, counting stats, pinned horizontal Work gallery, cursor-following blog previews.
+- Respects `prefers-reduced-motion`; falls back to a static background without WebGL.
 
 ### Placeholder content to replace
 
-Stats (50+, 98%, 12+), project names, blog posts, social links and `hello@imenit.com`
-are placeholders — update them in `index.html`.
+Stats, project names, blog posts, social links and the contact email are placeholders —
+update them in `src/lib/content.ts`.
