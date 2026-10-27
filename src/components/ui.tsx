@@ -1,4 +1,5 @@
 import type { ArtKind, ServiceIcon } from "../lib/content";
+import { projectImage } from "../lib/projectImages";
 
 /** Renders text as .word > .char spans so each character can be animated. */
 export function SplitChars({ text, className }: { text: string; className?: string }) {
@@ -70,6 +71,13 @@ const ICON_PATHS: Record<ServiceIcon, React.ReactNode> = {
 
 export function ServiceIconSvg({ icon }: { icon: ServiceIcon }) {
   return <svg className="card__icon" viewBox="0 0 48 48" aria-hidden>{ICON_PATHS[icon]}</svg>;
+}
+
+/** A project's visual: its screenshot if one is set, otherwise the monochrome art. */
+export function ProjectMedia({ image, art, alt = "" }: { image?: string; art: ArtKind; alt?: string }) {
+  const src = projectImage(image);
+  if (src) return <img className="media-img" src={src} alt={alt} loading="lazy" decoding="async" />;
+  return <Art kind={art} />;
 }
 
 const ART_ITEMS: Record<ArtKind, number> = { rings: 5, grid: 1, bars: 9, orb: 2 };

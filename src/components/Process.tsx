@@ -7,6 +7,11 @@ export function Process() {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(() => {
+    // the paper-toned panel settles into place as it scrolls in
+    gsap.fromTo(root.current, { scale: 0.94, borderRadius: 64 }, {
+      scale: 1, borderRadius: 32, ease: "none",
+      scrollTrigger: { trigger: root.current, start: "top bottom", end: "top 30%", scrub: 0.6 },
+    });
     gsap.utils.toArray<HTMLElement>(".step").forEach((step, i) => {
       const st = { trigger: ".steps", start: "top 80%", once: true };
       gsap.to(step.querySelector(".step__line i"), { scaleX: 1, duration: 1.6, ease: "expo.inOut", delay: i * 0.15, scrollTrigger: st });
@@ -20,7 +25,7 @@ export function Process() {
     <section className="process section" id="process" ref={root}>
       <div className="container">
         <div className="process__head">
-          <Eyebrow index="05">How We Work</Eyebrow>
+          <Eyebrow index="05">Process</Eyebrow>
           <h2 className="h2" data-words><SplitWords text="From spark to" /> <span className="wm"><em className="wi">scale.</em></span></h2>
         </div>
         <ol className="steps">

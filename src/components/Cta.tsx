@@ -27,7 +27,7 @@ export function Cta() {
           <span className="line"><SplitChars className="line__inner" text="Let's build" /></span>
           <span className="line"><span className="line__inner"><em><SplitChars text="what's next." /></em></span></span>
         </h2>
-        <a href="#contact" className="cta__circle" data-magnetic data-cursor="Let's go">
+        <a href="#contact" className="cta__circle" data-magnetic>
           <span className="cta__circle-text">
             <svg viewBox="0 0 200 200" aria-hidden>
               <defs><path id="circlePath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
@@ -37,8 +37,8 @@ export function Cta() {
           <Arrow className="cta__circle-arrow" diagonal />
           <span className="sr-only">Start a project</span>
         </a>
-        <button type="button" className="cta__mail" data-reveal data-cursor="Copy" onClick={copyEmail}>
-          <span data-scramble>{CONTACT_EMAIL}</span>
+        <button type="button" className="cta__mail" data-reveal onClick={copyEmail}>
+          <span>{CONTACT_EMAIL}</span>
         </button>
       </div>
     </section>

@@ -69,7 +69,18 @@ projects open a full case-study sheet, articles open a reading drawer, the email
 to the clipboard, and external links open in a new tab. An error boundary shows a styled
 message instead of a blank page if anything fails, and the site keeps working without WebGL.
 
+### Adding a project
+
+1. Open `src/lib/content.ts` and find `PROJECTS`.
+2. Copy one project block, paste it at the end of the list and change the text.
+3. Optional screenshot: put the image in `src/projects/` and set `image: "your-file.jpg"`.
+   Optional live link: set `link: "https://..."`.
+
+The Work section lays out any number of projects automatically (first one is featured,
+the rest form a staggered two-column grid, and an empty spot gets a "Your project could be here" card).
+
 ### Placeholder content to replace
 
-Stats, case studies (names, numbers, text), blog articles, social links, phone, location and the
-contact email are placeholders — update them in `src/lib/content.ts`.
+All in `src/lib/content.ts`: stats, case studies (names, numbers, text), blog articles,
+the founder note (name + quote), studio city / time zone for the live clock, availability line,
+social links, phone, location and the contact email.

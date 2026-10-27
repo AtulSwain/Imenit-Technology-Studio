@@ -5,13 +5,12 @@ import { sceneState } from "./lib/sceneState";
 import { UIProvider, useUI } from "./lib/ui";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Preloader } from "./components/Preloader";
-import { Cursor } from "./components/Cursor";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Marquee } from "./components/Marquee";
 import { Services } from "./components/Services";
 import { About } from "./components/About";
-import { Why } from "./components/Why";
+import { Approach } from "./components/Approach";
 import { Work } from "./components/Work";
 import { Process } from "./components/Process";
 import { Blog } from "./components/Blog";
@@ -124,7 +123,6 @@ function Site() {
       <div className="grain" aria-hidden />
       <div className="grid-lines" aria-hidden><span /><span /><span /><span /></div>
       <div className="scroll-progress" aria-hidden><span /></div>
-      <Cursor />
 
       <Header active={active} menuOpen={menuOpen} onToggleMenu={() => setMenuOpen((o) => !o)} />
 
@@ -133,7 +131,7 @@ function Site() {
         <Marquee />
         <Services />
         <About />
-        <Why />
+        <Approach />
         <Work />
         <Process />
         <Blog />

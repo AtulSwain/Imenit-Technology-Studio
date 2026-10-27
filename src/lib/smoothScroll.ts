@@ -22,7 +22,7 @@ export function initSmoothScroll() {
     return () => window.removeEventListener("scroll", onScroll);
   }
 
-  lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+  lenis = new Lenis({ lerp: 0.07, smoothWheel: true, wheelMultiplier: 0.95, touchMultiplier: 1.2 });
   lenis.on("scroll", (e: Lenis) => {
     ScrollTrigger.update();
     sceneState.velocity = e.velocity;

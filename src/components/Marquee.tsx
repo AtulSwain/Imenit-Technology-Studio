@@ -17,12 +17,12 @@ function Row({ items, sep, dir }: { items: Item[]; sep: string; dir: 1 | -1 }) {
       const w = track.offsetWidth;
       if (!w) return;
       const v = sceneState.velocity || 0;
-      const boost = 1 + Math.min(12, Math.abs(v) * 0.35);
+      const boost = 1 + Math.min(6, Math.abs(v) * 0.2);
       const sign = v < -0.5 ? -1 : 1;
-      x -= 0.6 * boost * dir * sign;
+      x -= 0.45 * boost * dir * sign;
       if (x <= -w) x += w;
       if (x > 0) x -= w;
-      const skew = -Math.max(-12, Math.min(12, v * 0.25)) * dir;
+      const skew = -Math.max(-5, Math.min(5, v * 0.12)) * dir;
       el.style.transform = `translate3d(${x}px,0,0) skewX(${skew}deg)`;
     };
     gsap.ticker.add(tick);
@@ -77,14 +77,7 @@ export function Marquee() {
           { text: "UI/UX Design", outline: true }, { text: "Cloud & DevOps" },
         ]}
       />
-      <Row
-        dir={-1}
-        sep="×"
-        items={[
-          { text: "Ideas", outline: true }, { text: "Technology" }, { text: "Impact", outline: true },
-          { text: "Strategy" }, { text: "Scale", outline: true },
-        ]}
-      />
+
     </section>
   );
 }

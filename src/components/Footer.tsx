@@ -3,6 +3,7 @@ import { gsap, useGSAP } from "../lib/gsap";
 import { CONTACT_EMAIL, NAV, SOCIAL } from "../lib/content";
 import { copyText, useUI } from "../lib/ui";
 import { Arrow, LogoE } from "./ui";
+import { Clock } from "./Clock";
 
 export function Footer() {
   const root = useRef<HTMLElement>(null);
@@ -25,19 +26,19 @@ export function Footer() {
       <div className="container">
         <div className="footer__top">
           <div className="footer__lead">
-            <p className="footer__claim">Ready when you are.<br /><em>Let's make it real.</em></p>
+            <p className="footer__claim">Got something in mind?<br /><em>We'd love to hear it.</em></p>
             <a href="#contact" className="btn btn--solid" data-magnetic><span className="btn__label">Start a project</span><Arrow /></a>
           </div>
           <div className="footer__col">
             <p className="eyebrow">Studio</p>
             {NAV.filter((n) => n.id !== "top").map((n) => (
-              <a key={n.id} href={`#${n.id}`} data-scramble>{n.label}</a>
+              <a key={n.id} href={`#${n.id}`}>{n.label}</a>
             ))}
           </div>
           <div className="footer__col">
             <p className="eyebrow">Social</p>
             {SOCIAL.map((s) => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" data-scramble>{s.label}</a>
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>
             ))}
           </div>
           <div className="footer__col footer__news">
@@ -47,7 +48,7 @@ export function Footer() {
               <button type="submit" aria-label="Subscribe"><svg viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" /></svg></button>
               <span className="news__ok" role="status">{subscribed ? "Thanks — you're on the list." : ""}</span>
             </form>
-            <button type="button" className="footer__mail" onClick={copyEmail} data-cursor="Copy">{CONTACT_EMAIL}</button>
+            <button type="button" className="footer__mail" onClick={copyEmail}>{CONTACT_EMAIL}</button>
           </div>
         </div>
         <div className="footer__brand" aria-hidden>
@@ -55,8 +56,8 @@ export function Footer() {
         </div>
         <div className="footer__bottom">
           <span>© {new Date().getFullYear()} IMENIT Technologies. All rights reserved.</span>
-          <span className="footer__made">Ideas × Technology × Impact</span>
-          <a href="#top" className="totop" data-magnetic><span data-scramble>Back to top</span> ↑</a>
+          <span className="footer__made">Designed &amp; built in-house · <Clock /></span>
+          <a href="#top" className="totop" data-magnetic><span>Back to top</span> ↑</a>
         </div>
       </div>
     </footer>
