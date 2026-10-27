@@ -1,8 +1,9 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
 import { scramble } from "../lib/scramble";
-import { HERO_WORDS } from "../lib/content";
-import { Arrow, SplitChars } from "./ui";
+import { HERO_WORDS, PROJECTS } from "../lib/content";
+import { useUI } from "../lib/ui";
+import { Arrow, Art, SplitChars } from "./ui";
 
 /** Last word of the headline cycles through HERO_WORDS, resizing smoothly. */
 function Rotator({ start }: { start: boolean }) {
@@ -38,6 +39,7 @@ function Rotator({ start }: { start: boolean }) {
 
 export function Hero({ ready }: { ready: boolean }) {
   const root = useRef<HTMLElement>(null);
+  const { openProject } = useUI();
 
   // initial hidden state + scroll-away effect
   useGSAP(() => {
@@ -105,6 +107,16 @@ export function Hero({ ready }: { ready: boolean }) {
         <div className="hero__hint" data-hero-fade><span className="hero__hint-icon" /> Drag to move the space</div>
         <a href="#services" className="hero__scroll" aria-label="Scroll down" data-hero-fade><span>Scroll</span><i /></a>
       </div>
+
+      <button className="hero__card" data-hero-fade onClick={() => openProject(0)} data-cursor="Open">
+        <span className="hero__card-media"><Art kind={PROJECTS[0].art} /></span>
+        <span className="hero__card-text">
+          <small>Featured case study</small>
+          <b>{PROJECTS[0].title}</b>
+          <span>{PROJECTS[0].category}</span>
+        </span>
+        <Arrow className="hero__card-arrow" diagonal />
+      </button>
 
       <div className="hero__side" aria-hidden>
         <span>Est. Digital Studio</span><i /><span>Web · Mobile · AI</span>

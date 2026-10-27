@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
 import { ABOUT_STATEMENT, STATS } from "../lib/content";
+import { Eyebrow } from "./ui";
 
 export function About() {
   const root = useRef<HTMLElement>(null);
@@ -25,7 +26,7 @@ export function About() {
   return (
     <section className="about section" id="about" ref={root}>
       <div className="container">
-        <p className="eyebrow" data-reveal>About the Studio</p>
+        <Eyebrow index="02">About the Studio</Eyebrow>
         <p className="about__statement">
           {ABOUT_STATEMENT.map((seg, si) =>
             seg.t.split(" ").map((w, wi) =>
