@@ -1,86 +1,60 @@
-# Imenit-Technology-Studio
-IMENIT Technologies represents innovation, precision, and digital excellence. Its bold typography, metallic silver finish, and minimalist design reflect sophistication, reliability, and forward-thinking technology. A premium identity built on simplicity, professionalism, and a vision for the future.
+# IMENIT Technologies
 
-## Website
+The website of **IMENIT Technologies** — an independent technology studio building digital products,
+intelligent software and the technology behind them.
 
-A black-and-white studio website with a live 3D background, built with:
+**Live:** https://atulswain.github.io/Imenit-Technology-Studio/
 
-- **React 19** + **TypeScript**, bundled with **Vite 8**
-- **React Three Fiber 9** + **drei** + **Three.js** for the WebGL scene
-- **GSAP 3** (ScrollTrigger, `@gsap/react`) for animation
-- **Lenis** for smooth scrolling
+## Stack
 
-### Run
+- **React 19 + TypeScript**, built with **Vite 8**
+- Plain, tokenised CSS (`src/styles/main.css`) — no UI or animation libraries
+- **lucide-react** icons, self-hosted **Inter** variable font
+- Home page **pre-rendered to static HTML** at build time, then hydrated
+- Hash routing (`#/work/<slug>`) so case studies work on GitHub Pages with refreshes and direct links
+
+## Run
 
 ```bash
 npm install
 npm run dev       # local dev server
-npm run build     # type-check + production build into the repo root (index.html + assets/)
+npm run build     # type-check, build, pre-render → writes the site to the repo root
 npm run preview   # serve the production build
 ```
 
-Source code lives in `src/` (entry: `src/index.html`). The **built website** is the root
-`index.html` + `assets/` — generated files, don't edit them by hand.
+## Deploy
 
-**Live site:** https://atulswain.github.io/Imenit-Technology-Studio/
-GitHub Pages setting: **Deploy from a branch → `main` / `(root)`**.
-`.github/workflows/deploy.yml` rebuilds the site automatically whenever source code on `main`
-changes and commits the fresh build, so Pages always serves the latest version.
+GitHub Pages is set to **Deploy from a branch → `main` / (root)**. The built site lives in the repository
+root (`index.html`, `assets/`, favicon, `og-image.png`, `robots.txt`, `sitemap.xml`).
+`.github/workflows/deploy.yml` rebuilds it automatically whenever source changes on `main`.
+Never edit the root `index.html` or `assets/` by hand — edit `src/` and build.
 
-**Vercel / Netlify:** import the repo — build command `npm run build`, output folder `.` (root).
+## Editing content
 
-### Contact form
+Everything — projects, services, about text, process, contact details — is in **`src/lib/content.ts`**.
 
-The form works without a server: it opens the visitor's email app with the message pre-filled.
-To receive messages directly instead, create a free form endpoint (e.g. Formspree) and set
-`CONTACT_FORM_ENDPOINT` in `src/lib/content.ts`.
+- **Add a project:** copy a block in `PROJECTS`, edit it, and put images in `src/projects/`
+  (import them at the top of `content.ts`). Case-study sections appear only when filled in.
+- **Contact form:** set `FORM_ENDPOINT` to a form service URL (e.g. Formspree) to receive enquiries
+  directly. Without it, the form opens the visitor's email app with their message filled in.
+- Only publish facts you can stand behind — no invented clients, numbers or testimonials.
 
-### Structure
+## Structure
 
 ```
 src/
-  App.tsx                 page shell, preloader, menu, smooth anchor links
-  components/             one file per section (Hero, Services, Work, ...)
-    ScrollDirector.tsx    page-wide scroll motion + 3D choreography
-  scene/                  React Three Fiber scene (lazy-loaded)
-    SpaceCanvas.tsx       canvas, studio lighting, camera rig, drag-to-spin
-    Ribbon.tsx            flowing chrome Möbius ribbon
-    Orbits.tsx, StarField.tsx
-  lib/
-    content.ts            ALL site copy + 3D pose per section — edit here
-    smoothScroll.ts, gsap.ts, scramble.ts, sceneState.ts
-  styles/global.css       design tokens and styles
+  index.html            page shell, SEO + social metadata
+  main.tsx              hydrate / render
+  App.tsx               layout, routing, active-section tracking
+  entry-server.tsx      build-time pre-render entry
+  components/           Header, Hero, Work, Services, About, Process, Contact, Footer, CaseStudy…
+  lib/content.ts        all site content
+  lib/router.ts         hash router + section scrolling
+  lib/reveal.ts         scroll-reveal (IntersectionObserver)
+  styles/main.css       design system
+  assets/               hero render
+  projects/             project screenshots
+  public/               favicon, og-image, robots.txt, sitemap.xml
+scripts/prerender.mjs   pre-renders the home page and inlines CSS
+docs/AUDIT.md           audit of the previous site and redesign notes
 ```
-
-### Highlights
-
-- **Moving 3D background**: a twisted chrome ribbon that keeps flowing, follows the mouse,
-  can be **dragged and spun** in the hero, ripples with scroll speed and glides to a new pose for
-  every section. Stars warp forward when you scroll fast. The scene is code-split and loads behind the preloader.
-- Preloader counter, character-by-character headline, rotating word, scrambling text on hover.
-- Custom cursor with labels, magnetic buttons, spotlight + 3D tilt cards, draggable services slider.
-- Scroll-filled statement, counting stats, pinned horizontal Work gallery, cursor-following blog previews.
-- Respects `prefers-reduced-motion`; falls back to a static background without WebGL.
-
-### Links never leave the page
-
-In-page links scroll smoothly (long jumps use a quick curtain transition) and never change the URL,
-projects open a full case-study sheet, articles open a reading drawer, the email address copies
-to the clipboard, and external links open in a new tab. An error boundary shows a styled
-message instead of a blank page if anything fails, and the site keeps working without WebGL.
-
-### Adding a project
-
-1. Open `src/lib/content.ts` and find `PROJECTS`.
-2. Copy one project block, paste it at the end of the list and change the text.
-3. Optional screenshot: put the image in `src/projects/` and set `image: "your-file.jpg"`.
-   Optional live link: set `link: "https://..."`.
-
-The Work section lays out any number of projects automatically (first one is featured,
-the rest form a staggered two-column grid, and an empty spot gets a "Your project could be here" card).
-
-### Placeholder content to replace
-
-All in `src/lib/content.ts`: stats, case studies (names, numbers, text), blog articles,
-the founder note (name + quote), studio city / time zone for the live clock, availability line,
-social links, phone, location and the contact email.

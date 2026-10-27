@@ -1,95 +1,130 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { NAV, CONTACT_EMAIL } from "../lib/content";
-import { isNavigating, onScroll } from "../lib/smoothScroll";
-import { Arrow, LogoE } from "./ui";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { NAV } from "../lib/content";
+import { scrollToSection, type Route } from "../lib/router";
+import { Logo } from "./Logo";
 
-type Props = { active: string; menuOpen: boolean; onToggleMenu: () => void };
+type Props = { route: Route; active: string };
 
-/** Glass pill navigation with an indicator that slides to the active (or hovered) link. */
-export function Header({ active, menuOpen, onToggleMenu }: Props) {
+export function Header({ route, active }: Props) {
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [hover, setHover] = useState<string | null>(null);
-  const last = useRef(0);
-  const nav = useRef<HTMLElement>(null);
-  const pill = useRef<HTMLSpanElement>(null);
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => onScroll((y) => {
-    setScrolled(y > 40);
-    if (isNavigating() || y < last.current - 2) setHidden(false);
-    else if (y > last.current + 2 && y > 400) setHidden(true);
-    last.current = y;
-  }), []);
-
-  // move the pill under the hovered link, otherwise the active one
-  useLayoutEffect(() => {
-    const place = () => {
-      const target = nav.current?.querySelector<HTMLElement>(`[data-id="${hover ?? active}"]`);
-      if (!target || !pill.current) return;
-      pill.current.style.width = `${target.offsetWidth}px`;
-      pill.current.style.transform = `translateX(${target.offsetLeft}px)`;
-      pill.current.style.opacity = "1";
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 24);
+        ticking = false;
+      });
     };
-    place();
-    window.addEventListener("resize", place);
-    document.fonts?.ready.then(place);
-    return () => window.removeEventListener("resize", place);
-  }, [active, hover]);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const cls = ["header", scrolled && "is-scrolled", hidden && !menuOpen && "is-hidden"].filter(Boolean).join(" ");
+  // mobile menu: lock scroll, Esc to close, move focus in and back out
+  useEffect(() => {
+    document.body.classList.toggle("is-menu-open", open);
+    if (!open) return;
+    menuRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // close the menu if the viewport grows past the mobile breakpoint
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 960px)");
+    const onChange = () => mq.matches && setOpen(false);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  /** On the home page, scroll in place; from a case study, let the hash change take us home. */
+  const go = (id: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+    const wasOpen = open;
+    setOpen(false);
+    if (route.page !== "home" || !document.getElementById(id)) return;
+    e.preventDefault();
+    history.replaceState(null, "", `#${id}`);
+    // when the mobile menu was open, wait until the scroll lock is released
+    if (wasOpen) requestAnimationFrame(() => requestAnimationFrame(() => scrollToSection(id)));
+    else scrollToSection(id);
+  };
+
+  const goTop = (e: MouseEvent<HTMLAnchorElement>) => {
+    setOpen(false);
+    if (route.page !== "home") return;
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  };
 
   return (
-    <>
-      <header className={cls}>
-        <div className="container header__inner">
-          <a className="logo" href="#top" aria-label="IMENIT Technologies — home">
-            <span className="logo__word">IM<LogoE />NIT</span>
-            <span className="logo__sub">Technologies</span>
-          </a>
+    <header className={`header${scrolled || route.page === "case" ? " is-solid" : ""}${open ? " is-open" : ""}`}>
+      <div className="container header__bar">
+        <a className="header__logo" href="#" onClick={goTop}>
+          <Logo />
+        </a>
 
-          <nav className="nav" aria-label="Main" ref={nav} onPointerLeave={() => setHover(null)}>
-            <span className="nav__pill" ref={pill} aria-hidden />
-            {NAV.map((n) => (
-              <a
-                key={n.id}
-                data-id={n.id}
-                href={`#${n.id}`}
-                className={`nav__link${active === n.id ? " is-active" : ""}`}
-                aria-current={active === n.id ? "true" : undefined}
-                onPointerEnter={() => setHover(n.id)}
-              >
-                {n.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="header__right">
-            <a href="#contact" className="btn btn--ghost header__cta" data-magnetic>
-              <i className="pulse pulse--sm" aria-hidden />
-              <span className="btn__label">Let's talk</span>
-              <Arrow />
-            </a>
-            <button className="burger" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={onToggleMenu}>
-              <span /><span />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="menu" aria-hidden={!menuOpen}>
-        <nav className="menu__nav">
-          {NAV.map((n, i) => (
-            <a key={n.id} href={`#${n.id}`} tabIndex={menuOpen ? 0 : -1} className={active === n.id ? "is-active" : undefined}>
-              <small>{String(i + 1).padStart(2, "0")}</small>
-              <span>{n.label}</span>
+        <nav className="nav" aria-label="Primary">
+          {NAV.map((n) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              onClick={go(n.id)}
+              className={`nav__link${active === n.id ? " is-active" : ""}`}
+              aria-current={active === n.id ? "location" : undefined}
+            >
+              {n.label}
             </a>
           ))}
         </nav>
-        <div className="menu__foot">
-          <span>Ideas × Technology × Impact</span>
-          <span>{CONTACT_EMAIL}</span>
-        </div>
+
+        <a className="btn btn--outline header__cta" href="#contact" onClick={go("contact")}>
+          Start a project <ArrowUpRight aria-hidden size={16} strokeWidth={1.6} />
+        </a>
+
+        <button
+          ref={toggleRef}
+          className="menu-toggle"
+          type="button"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          onClick={() => setOpen((o) => !o)}
+        >
+          {open ? <X aria-hidden size={22} strokeWidth={1.6} /> : <Menu aria-hidden size={22} strokeWidth={1.6} />}
+          <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+        </button>
       </div>
-    </>
+
+      <div id="mobile-menu" ref={menuRef} className="mobile-menu" hidden={!open}>
+        <nav className="container" aria-label="Mobile">
+          <ul>
+            {NAV.map((n, i) => (
+              <li key={n.id}>
+                <a href={`#${n.id}`} onClick={go(n.id)}>
+                  <span className="mono">{String(i + 1).padStart(2, "0")}</span>
+                  {n.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a className="btn btn--solid mobile-menu__cta" href="#contact" onClick={go("contact")}>
+            Start a project <ArrowUpRight aria-hidden size={18} strokeWidth={1.6} />
+          </a>
+        </nav>
+      </div>
+    </header>
   );
 }

@@ -1,97 +1,72 @@
-import { useRef } from "react";
-import { gsap, useGSAP } from "../lib/gsap";
-import { PROJECTS } from "../lib/content";
-import { useUI } from "../lib/ui";
-import { Arrow, Eyebrow, ProjectMedia } from "./ui";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { MORE_WORK, PROJECTS } from "../lib/content";
+import { caseHref } from "../lib/router";
+import { ProjectCover } from "./ProjectCover";
+import { SectionHead } from "./SectionHead";
 
-/**
- * Selected work. The first project is featured full-width; the rest flow into a
- * staggered two-column grid, so adding projects in content.ts needs no layout changes.
- * When the grid has an empty spot, an invitation card fills it.
- */
 export function Work() {
-  const root = useRef<HTMLElement>(null);
-  const { openProject } = useUI();
-  const [featured, ...rest] = PROJECTS;
-  const showInvite = rest.length % 2 === 1;
-
-  useGSAP(() => {
-    // each visual wipes open from the bottom as it enters, then drifts slightly (parallax)
-    gsap.utils.toArray<HTMLElement>(".work-card").forEach((card) => {
-      const media = card.querySelector(".work-card__media");
-      const inner = card.querySelector(".work-card__media > *");
-      gsap.fromTo(media, { clipPath: "inset(18% 6% 0% 6% round 18px)" }, {
-        clipPath: "inset(0% 0% 0% 0% round 18px)", duration: 1.5, ease: "expo.out",
-        scrollTrigger: { trigger: card, start: "top 88%", once: true },
-      });
-      gsap.fromTo(inner, { yPercent: -6, scale: 1.12 }, {
-        yPercent: 6, scale: 1.12, ease: "none",
-        scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true },
-      });
-      gsap.from(card.querySelectorAll(".work-card__info > *"), {
-        y: 24, opacity: 0, duration: 1.1, ease: "expo.out", stagger: 0.06,
-        scrollTrigger: { trigger: card, start: "top 80%", once: true },
-      });
-    });
-  }, { scope: root });
-
-  const card = (p: (typeof PROJECTS)[number], i: number, extra = "") => (
-    <button
-      type="button"
-      className={`work-card ${extra}`}
-      key={p.title}
-      onClick={() => openProject(i)}
-      aria-label={`Open case study: ${p.title}`}
-    >
-      <span className="work-card__media">
-        <ProjectMedia image={p.image} art={p.art} alt={p.title} />
-        <span className="work-card__view" aria-hidden>View case study <Arrow className="" diagonal /></span>
-      </span>
-      <span className="work-card__info">
-        <span className="work-card__row">
-          <span className="work-card__title">{p.title}</span>
-          <span className="work-card__year">{p.year}</span>
-        </span>
-        <span className="work-card__row work-card__row--sub">
-          <span>{p.category}</span>
-          <span className="work-card__result">{p.results[0].value} {p.results[0].label}</span>
-        </span>
-      </span>
-    </button>
-  );
-
   return (
-    <section className="work-sec section" id="work" ref={root}>
+    <section className="section work" id="work" aria-labelledby="work-title">
       <div className="container">
-        <div className="work-sec__head">
-          <div>
-            <Eyebrow index="04">Selected work</Eyebrow>
-            <h2 className="h2" data-words>
-              <span className="wm"><span className="wi">Products</span></span>{" "}
-              <span className="wm"><span className="wi">that</span></span>{" "}
-              <span className="wm"><em className="wi">move</em></span>{" "}
-              <span className="wm"><span className="wi">people.</span></span>
-            </h2>
-          </div>
-          <p className="muted" data-reveal>
-            A few things we've designed and built recently. Open any of them for the story behind it.
-            <span className="work-sec__count">{String(PROJECTS.length).padStart(2, "0")} projects</span>
-          </p>
-        </div>
+        <SectionHead
+          index="01"
+          label="Selected work"
+          id="work-title"
+          title="Products we've designed, engineered and shipped."
+          intro="A few of the platforms built at the studio — each with its own story, stack and trade-offs."
+        />
 
-        {featured && card(featured, 0, "work-card--featured")}
+        <ol className="projects">
+          {PROJECTS.map((p, i) => (
+            <li className={`project${i % 2 ? " project--flip" : ""}`} key={p.slug} data-reveal>
+              <a className="project__media" href={caseHref(p.slug)} tabIndex={-1} aria-hidden>
+                <ProjectCover project={p} />
+              </a>
+              <div className="project__body">
+                <div className="project__meta mono">
+                  <span>{String(i + 1).padStart(2, "0")}</span>
+                  <span>{p.category}</span>
+                  <span className={`status${p.status === "Live" ? " status--live" : ""}`}>{p.status}</span>
+                </div>
+                <h3 className="project__name">
+                  <a href={caseHref(p.slug)}>{p.name}</a>
+                </h3>
+                <p className="project__tagline">{p.tagline}</p>
+                <p className="project__summary">{p.summary}</p>
+                <ul className="tags" aria-label="Built with">
+                  {p.stack.slice(0, 5).map((s) => <li key={s}>{s}</li>)}
+                </ul>
+                <div className="project__links">
+                  <a className="link" href={caseHref(p.slug)}>
+                    Read the case study <ArrowRight aria-hidden size={16} strokeWidth={1.6} />
+                  </a>
+                  {p.links.live && (
+                    <a className="link link--quiet" href={p.links.live} target="_blank" rel="noopener noreferrer">
+                      Visit live site <ArrowUpRight aria-hidden size={16} strokeWidth={1.6} />
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
 
-        <div className="work-grid">
-          {rest.map((p, i) => card(p, i + 1))}
-          {showInvite && (
-            <a href="#contact" className="work-invite">
-              <span className="work-invite__inner">
-                <small>Next up</small>
-                <span className="work-invite__title">Your project<br /><em>could be here.</em></span>
-                <span className="work-invite__cta">Start a conversation <Arrow className="" /></span>
-              </span>
-            </a>
-          )}
+        <div className="more" data-reveal>
+          <h3 className="more__title label">More from the studio</h3>
+          <ul className="more__list">
+            {MORE_WORK.map((w) => (
+              <li key={w.name}>
+                <a href={w.href} target="_blank" rel="noopener noreferrer">
+                  <span className="more__name">{w.name}</span>
+                  <span className="more__detail">{w.detail}</span>
+                  <span className="more__stack mono">{w.stack}</span>
+                  <ArrowUpRight className="more__icon" aria-hidden size={18} strokeWidth={1.5} />
+                  <span className="sr-only"> — source code on GitHub (opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

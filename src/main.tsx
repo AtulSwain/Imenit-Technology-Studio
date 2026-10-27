@@ -1,16 +1,22 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "lenis/dist/lenis.css";
-import "./styles/global.css";
-import "./styles/premium.css";
-import "./styles/human.css";
+import { createRoot, hydrateRoot } from "react-dom/client";
+import "@fontsource-variable/inter/wght.css";
+import "./styles/main.css";
 import App from "./App";
+import { parseHash } from "./lib/router";
 
-// enables the JS-gated "hidden until revealed" styles
-document.documentElement.classList.add("js");
-
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root")!;
+const app = (
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 );
+
+// The home page is pre-rendered at build time. Hydrate it when that's what we're showing;
+// for a case-study link (#/work/…) render fresh instead.
+if (root.firstElementChild && parseHash(window.location.hash).page === "home") {
+  hydrateRoot(root, app);
+} else {
+  root.textContent = "";
+  createRoot(root).render(app);
+}

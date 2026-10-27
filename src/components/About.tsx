@@ -1,68 +1,29 @@
-import { useRef } from "react";
-import { gsap, useGSAP } from "../lib/gsap";
-import { ABOUT_STATEMENT, FOUNDER_NOTE, STATS } from "../lib/content";
-import { Eyebrow } from "./ui";
+import { ABOUT } from "../lib/content";
+import { SectionHead } from "./SectionHead";
 
 export function About() {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(() => {
-    // statement lights up word by word while scrolling
-    gsap.to(".about__statement .w", {
-      opacity: 1, ease: "none", stagger: 0.1,
-      scrollTrigger: { trigger: ".about__statement", start: "top 80%", end: "bottom 45%", scrub: 0.6 },
-    });
-    // the note's underline draws in like a pen stroke
-    gsap.fromTo(".note__stroke path", { strokeDashoffset: 1 }, {
-      strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut",
-      scrollTrigger: { trigger: ".note", start: "top 80%", once: true },
-    });
-    // counters
-    root.current!.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
-      const o = { v: 0 };
-      gsap.to(o, {
-        v: Number(el.dataset.count), duration: 2.2, ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
-        onUpdate: () => { el.textContent = String(Math.round(o.v)); },
-      });
-    });
-  }, { scope: root });
-
   return (
-    <section className="about section" id="about" ref={root}>
+    <section className="section about" id="about" aria-labelledby="about-title">
       <div className="container">
-        <Eyebrow index="02">About the studio</Eyebrow>
-        <p className="about__statement">
-          {ABOUT_STATEMENT.map((seg, si) =>
-            seg.t.split(" ").map((w, wi) =>
-              seg.em
-                ? <em className="w" key={`${si}-${wi}`}>{w}</em>
-                : <span className="w" key={`${si}-${wi}`}>{w}</span>,
-            ),
-          )}
-        </p>
+        <SectionHead index="03" label="About the studio" id="about-title" title="Small by design. Serious about the work." />
 
-        <div className="about__lower">
-          <figure className="note" data-reveal>
-            <blockquote>“{FOUNDER_NOTE.text}”</blockquote>
-            <figcaption>
-              <span className="note__name">{FOUNDER_NOTE.name}</span>
-              <svg className="note__stroke" viewBox="0 0 160 14" aria-hidden>
-                <path pathLength={1} d="M2 9c18-5 34-6 52-3s30 4 48 0 34-6 56-1" />
-              </svg>
-              <span className="note__role">{FOUNDER_NOTE.role}</span>
-            </figcaption>
-          </figure>
-
-          <div className="stats">
-            {STATS.map((s) => (
-              <div className="stat" data-reveal key={s.label}>
-                <span className="stat__num"><b data-count={s.value}>0</b>{s.suffix}</span>
-                <span className="stat__label">{s.label}</span>
-              </div>
-            ))}
+        <div className="about__grid">
+          <blockquote className="about__statement" data-reveal>
+            <p>{ABOUT.statement}</p>
+          </blockquote>
+          <div className="about__body" data-reveal>
+            {ABOUT.body.map((p) => <p key={p}>{p}</p>)}
           </div>
         </div>
+
+        <ul className="values">
+          {ABOUT.values.map((v, i) => (
+            <li className="value" key={v.title} data-reveal style={{ transitionDelay: `${(i % 3) * 60}ms` }}>
+              <h3 className="value__title">{v.title}</h3>
+              <p>{v.text}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
