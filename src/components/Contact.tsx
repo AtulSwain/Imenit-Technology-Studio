@@ -86,7 +86,7 @@ export function Contact() {
           <ul className="contact__list" data-reveal>
             <li>
               <small>Email</small>
-              <button className="contact__copy" onClick={copyEmail} data-cursor="Copy">
+              <button className="contact__copy" onClick={copyEmail}>
                 <span>{CONTACT_EMAIL}</span>
                 <svg viewBox="0 0 24 24" aria-hidden><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
               </button>
@@ -97,7 +97,7 @@ export function Contact() {
 
           <div className="contact__social" data-reveal>
             {SOCIAL.map((s) => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" data-scramble>{s.label}</a>
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>
             ))}
           </div>
         </div>

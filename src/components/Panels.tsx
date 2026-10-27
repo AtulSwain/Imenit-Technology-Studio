@@ -3,7 +3,7 @@ import { gsap } from "../lib/gsap";
 import { useUI } from "../lib/ui";
 import { PROJECTS, POSTS } from "../lib/content";
 import { scrollToTarget, startScroll, stopScroll } from "../lib/smoothScroll";
-import { Arrow, Art } from "./ui";
+import { Arrow, Art, ProjectMedia } from "./ui";
 
 /**
  * Full-screen detail panels. Projects open as a case-study sheet that slides up,
@@ -81,8 +81,13 @@ export function Panels() {
               <h2 className="case__title panel__reveal">{p.title}</h2>
               <p className="case__summary panel__reveal">{p.summary}</p>
               <div className="case__tags panel__reveal">{[p.category, ...p.services].map((t) => <span key={t}>{t}</span>)}</div>
+              {p.link && (
+                <a className="link-arrow case__link panel__reveal" href={p.link} target="_blank" rel="noopener noreferrer">
+                  <span>Visit live site</span><Arrow className="" diagonal />
+                </a>
+              )}
             </header>
-            <div className="case__media panel__reveal"><Art kind={p.art} /></div>
+            <div className="case__media panel__reveal"><ProjectMedia image={p.image} art={p.art} alt={p.title} /></div>
             <div className="container">
               <div className="case__results">
                 {p.results.map((r) => (

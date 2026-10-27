@@ -60,7 +60,7 @@ export function Blog() {
               <button
                 type="button"
                 className="post"
-                data-cursor="Read"
+               
                 onPointerEnter={() => show(p.art)}
                 onPointerLeave={hide}
                 onClick={() => { hide(); openPost(i); }}

@@ -12,6 +12,9 @@ export const NAV = [
 export const CONTACT_EMAIL = "hello@imenit.com"; // placeholder
 export const CONTACT_PHONE = "+91 00000 00000"; // placeholder
 export const CONTACT_LOCATION = "India · Working worldwide"; // placeholder
+export const STUDIO_CITY = "India"; // shown next to the live clock — placeholder
+export const TIMEZONE = "Asia/Kolkata"; // IANA time zone for the live clock
+export const AVAILABILITY = "Booking new projects"; // small status line in the hero
 
 /**
  * Optional form endpoint (e.g. Formspree "https://formspree.io/f/xxxx").
@@ -53,12 +56,17 @@ export const SERVICES: { title: string; text: string; tags: string[]; icon: Serv
 
 // Statement text: segments with em=true render in the italic serif accent.
 export const ABOUT_STATEMENT: { t: string; em?: boolean }[] = [
-  { t: "We are a studio of engineers, designers and thinkers. We turn bold ideas into" },
-  { t: "precise", em: true },
-  { t: "digital products — engineered for scale, designed for people and built to make a" },
-  { t: "lasting impact", em: true },
-  { t: "on the businesses we partner with." },
+  { t: "We started IMENIT because too much software ships late, looks like everything else and quietly breaks. So we keep teams small, show you real progress every week, and" },
+  { t: "sweat the details", em: true },
+  { t: "most people skip." },
 ];
+
+// A short personal note in the About section — edit the name and words to make it yours.
+export const FOUNDER_NOTE = {
+  text: "Every project gets the same promise: honest timelines, clean code you own, and a team that picks up the phone after launch.",
+  name: "Atul Swain", // placeholder — your name
+  role: "Founder, IMENIT",
+};
 
 export const STATS = [ // placeholder numbers
   { value: 50, suffix: "+", label: "Projects delivered" },
@@ -67,21 +75,30 @@ export const STATS = [ // placeholder numbers
   { value: 24, suffix: "/7", label: "Support & monitoring" },
 ];
 
-export type BentoKind = "scale" | "ai" | "design" | "secure" | "speed";
-export const WHY: { kind: BentoKind; title: string; text: string }[] = [
-  { kind: "scale", title: "Engineered to scale", text: "Cloud-native architecture, automated testing and monitoring from day one." },
-  { kind: "ai", title: "AI-native thinking", text: "We look for where AI removes real work — then ship it safely into your product." },
-  { kind: "design", title: "Design that sells", text: "Every pixel is intentional. Interfaces that build trust and convert." },
-  { kind: "secure", title: "Secure by default", text: "Best-practice auth, encryption and reviews baked into every release." },
-  { kind: "speed", title: "Weekly progress", text: "Short sprints and live demos — you always see what you are paying for." },
+export const PRINCIPLES: { title: string; text: string }[] = [
+  { title: "Small teams, senior people", text: "The people you meet on the first call are the people who build your product. No hand-offs to a team you never see." },
+  { title: "Progress you can click", text: "A working build every week, not a status report. You always know where things stand." },
+  { title: "Honest about trade-offs", text: "If something isn't worth building yet, we'll tell you — and suggest the simpler thing that is." },
+  { title: "Built to be handed over", text: "Clean code, real documentation and no lock-in. It's your product, and it should stay that way." },
 ];
 
 export type ArtKind = "rings" | "grid" | "bars" | "orb";
 export type Project = {
   title: string; category: string; art: ArtKind; year: string;
+  /** Optional screenshot: put the file in src/projects/ and write its file name here, e.g. "nova.jpg". */
+  image?: string;
+  /** Optional live link shown in the case study. */
+  link?: string;
   summary: string; challenge: string; solution: string;
   services: string[]; stack: string[]; results: { value: string; label: string }[];
 };
+/*
+ * ADDING A PROJECT
+ * Copy one block below, paste it at the end of the list and change the text.
+ * For a real screenshot, drop the image in src/projects/ and set image: "file-name.jpg"
+ * (without an image, a monochrome visual is used: art "rings" | "grid" | "bars" | "orb").
+ * The Work section lays out any number of projects automatically.
+ */
 export const PROJECTS: Project[] = [ // placeholder case studies
   {
     title: "Nova Ledger", category: "Fintech · Web App", art: "rings", year: "2026",
@@ -180,7 +197,7 @@ export const SCENE_POSES: Record<string, ScenePose> = {
   top: { x: 2.45, y: 0.1, s: 1, rx: 0, dim: 1 },
   services: { x: -2.6, y: -0.4, s: 0.8, rx: 0.6, dim: 0.75 },
   about: { x: 2.4, y: 0.6, s: 0.62, rx: -0.5, dim: 0.6 },
-  why: { x: -2.8, y: 0.8, s: 0.5, rx: 0.9, dim: 0.4 },
+  approach: { x: -2.8, y: 0.8, s: 0.5, rx: 0.9, dim: 0.45 },
   work: { x: 0, y: 0, s: 0.42, rx: 1.2, dim: 0.45 },
   process: { x: -2.3, y: 0.2, s: 0.7, rx: -0.2, dim: 0.55 },
   blog: { x: 2.6, y: -0.5, s: 0.55, rx: 0.4, dim: 0.5 },

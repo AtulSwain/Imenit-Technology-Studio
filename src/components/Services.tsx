@@ -117,7 +117,7 @@ export function Services() {
           <h2 className="h2" data-words><SplitWords text="What We Do" /></h2>
           <p className="muted" data-reveal>From idea to execution, we craft technology that solves real problems and drives meaningful results.</p>
           <a href="#contact" className="link-arrow" data-reveal data-magnetic>
-            <span data-scramble>Discuss your idea</span><Arrow className="" />
+            <span>Discuss your idea</span><Arrow className="" />
           </a>
         </div>
 
@@ -135,7 +135,7 @@ export function Services() {
               </button>
             </div>
           </div>
-          <div className="slider__viewport" ref={viewport} data-cursor="Drag">
+          <div className="slider__viewport" ref={viewport}>
             <div className="slider__track" ref={track}>
               {SERVICES.map((s, i) => (
                 <Card key={s.title} s={s} i={i} active={i === idx} onSelect={() => { if (!drag.current.moved) go(i); }} />

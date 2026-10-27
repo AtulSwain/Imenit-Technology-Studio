@@ -128,11 +128,10 @@ export default function SpaceCanvas() {
   return (
     <Canvas
       className="space"
-      dpr={[1, small ? 1.5 : 2]}
+      dpr={[1, small ? 1.25 : 1.75]}
       camera={{ fov: 35, position: [0, 0, 10], near: 0.1, far: 200 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => { gl.toneMappingExposure = 1.15; }}
-      eventSource={undefined}
       style={{ position: "fixed", inset: 0, pointerEvents: "none" }}
       aria-hidden
     >
@@ -155,8 +154,8 @@ export default function SpaceCanvas() {
         <Orbits />
       </Rig>
 
-      <StarField count={small ? 1400 : 3200} rMin={3} rMax={26} size={0.05} opacity={0.55} drift={0.008} parallax={0.06} warp />
-      <StarField count={small ? 120 : 260} rMin={6} rMax={30} size={0.16} opacity={0.9} drift={0.004} parallax={0.1} />
+      <StarField count={small ? 900 : 1800} rMin={3} rMax={26} size={0.05} opacity={0.55} drift={0.008} parallax={0.06} warp />
+      <StarField count={small ? 90 : 180} rMin={6} rMax={30} size={0.16} opacity={0.9} drift={0.004} parallax={0.1} />
     </Canvas>
   );
 }

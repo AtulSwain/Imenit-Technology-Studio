@@ -66,7 +66,7 @@ export function Header({ active, menuOpen, onToggleMenu }: Props) {
           <div className="header__right">
             <a href="#contact" className="btn btn--ghost header__cta" data-magnetic>
               <i className="pulse pulse--sm" aria-hidden />
-              <span className="btn__label" data-scramble>Let's talk</span>
+              <span className="btn__label">Let's talk</span>
               <Arrow />
             </a>
             <button className="burger" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={onToggleMenu}>

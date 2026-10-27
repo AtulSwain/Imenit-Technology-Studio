@@ -41,8 +41,8 @@ function makeBumpTexture() {
  * recomputed each frame so the shape keeps flowing and ripples with scroll speed.
  */
 export function Ribbon({ small }: { small: boolean }) {
-  const SEG = small ? 360 : 640;
-  const ACROSS = small ? 12 : 20;
+  const SEG = small ? 300 : 460;
+  const ACROSS = small ? 10 : 14;
 
   const geometry = useMemo(() => {
     const count = (SEG + 1) * (ACROSS + 1);
