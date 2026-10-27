@@ -33,7 +33,7 @@ jobs:
       - run: npm run build
       - name: Commit the built site if it changed
         run: |
-          git add -A index.html assets
+          git add -A index.html assets favicon.svg favicon-32.png apple-touch-icon.png og-image.png robots.txt sitemap.xml .nojekyll
           if git diff --cached --quiet; then
             echo "Built site is already up to date."
           else

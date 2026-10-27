@@ -1,6 +1,7 @@
 # Project images
 
-Put project screenshots here (jpg, png, webp or avif), then reference the file name in
-`src/lib/content.ts`, for example `image: "nova-ledger.jpg"`.
+Screenshots used by the Work section and case studies.
 
-Tip: use landscape images around 1600×1000 px, under ~400 KB each.
+1. Save the image here (WebP preferred, landscape ~1440×900, under ~150 KB).
+2. Import it at the top of `src/lib/content.ts`, e.g. `import greenShot from "../projects/green.webp";`
+3. Use it as the project's `cover` (with `coverStyle: "screenshot"`) or in its `gallery`.
