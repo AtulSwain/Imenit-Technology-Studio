@@ -11,6 +11,8 @@ import { Services } from "./components/Services";
 import { About } from "./components/About";
 import { Process } from "./components/Process";
 import { Contact } from "./components/Contact";
+import { BuildCta } from "./components/BuildCta";
+import { Starfield } from "./components/Starfield";
 import { Footer } from "./components/Footer";
 import { CaseStudy } from "./components/CaseStudy";
 
@@ -51,6 +53,7 @@ function Site() {
   return (
     <>
       <a className="skip" href="#main">Skip to content</a>
+      <Starfield />
       <Header route={route} active={active} />
       <main id="main" tabIndex={-1}>
         {route.page === "case" ? (
@@ -63,6 +66,7 @@ function Site() {
             <Services />
             <About />
             <Process />
+            <BuildCta />
             <Contact />
           </>
         )}

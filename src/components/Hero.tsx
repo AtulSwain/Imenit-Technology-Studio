@@ -102,7 +102,7 @@ export function Hero() {
       </div>
 
       <div className="container hero__meta">
-        <span className="mono">Web · AI · Software</span>
+        <span className="mono">Ideas × Technology × Impact</span>
         <span className="mono">{SITE.location}</span>
         <a className="hero__scroll mono" href="#work" onClick={jump("work")}>
           Selected work <ArrowDown aria-hidden size={14} strokeWidth={1.6} />

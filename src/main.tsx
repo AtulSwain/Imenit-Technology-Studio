@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import "@fontsource-variable/inter/wght.css";
+import "@fontsource/instrument-serif/latin-400-italic.css";
 import "./styles/main.css";
 import App from "./App";
 import { parseHash } from "./lib/router";
