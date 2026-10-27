@@ -1,0 +1,70 @@
+import { useEffect, useRef } from "react";
+import { gsap } from "../lib/gsap";
+import { sceneState } from "../lib/sceneState";
+
+type Item = { text: string; outline?: boolean };
+
+/** Endless text band. Speeds up, reverses and skews with scroll velocity. */
+function Row({ items, sep, dir }: { items: Item[]; sep: string; dir: 1 | -1 }) {
+  const row = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = row.current!;
+    const track = el.firstElementChild as HTMLElement;
+    let x = 0;
+    const tick = () => {
+      const w = track.offsetWidth;
+      if (!w) return;
+      const v = sceneState.velocity || 0;
+      const boost = 1 + Math.min(12, Math.abs(v) * 0.35);
+      const sign = v < -0.5 ? -1 : 1;
+      x -= 0.6 * boost * dir * sign;
+      if (x <= -w) x += w;
+      if (x > 0) x -= w;
+      const skew = -Math.max(-12, Math.min(12, v * 0.25)) * dir;
+      el.style.transform = `translate3d(${x}px,0,0) skewX(${skew}deg)`;
+    };
+    gsap.ticker.add(tick);
+    return () => gsap.ticker.remove(tick);
+  }, [dir]);
+
+  const track = (key: number) => (
+    <div className="marquee__track" key={key} aria-hidden={key > 0}>
+      {items.map((it, i) => (
+        <span key={i} style={{ display: "contents" }}>
+          <span className={it.outline ? "o" : undefined}>{it.text}</span>
+          <i>{sep}</i>
+        </span>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className={`marquee__row${dir < 0 ? " marquee__row--rev" : ""}`} ref={row}>
+      {[0, 1, 2].map(track)}
+    </div>
+  );
+}
+
+export function Marquee() {
+  return (
+    <section className="marquee" aria-label="What we do">
+      <Row
+        dir={1}
+        sep="✦"
+        items={[
+          { text: "Web Development" }, { text: "Mobile Apps", outline: true }, { text: "AI & Automation" },
+          { text: "UI/UX Design", outline: true }, { text: "Cloud & DevOps" },
+        ]}
+      />
+      <Row
+        dir={-1}
+        sep="×"
+        items={[
+          { text: "Ideas", outline: true }, { text: "Technology" }, { text: "Impact", outline: true },
+          { text: "Strategy" }, { text: "Scale", outline: true },
+        ]}
+      />
+    </section>
+  );
+}
