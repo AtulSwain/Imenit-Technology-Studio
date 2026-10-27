@@ -6,6 +6,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Work } from "./components/Work";
+import { Ticker } from "./components/Ticker";
 import { Services } from "./components/Services";
 import { About } from "./components/About";
 import { Process } from "./components/Process";
@@ -57,6 +58,7 @@ function Site() {
         ) : (
           <>
             <Hero />
+            <Ticker />
             <Work />
             <Services />
             <About />
@@ -66,6 +68,7 @@ function Site() {
         )}
       </main>
       <Footer />
+      <div className="progress" aria-hidden />
     </>
   );
 }

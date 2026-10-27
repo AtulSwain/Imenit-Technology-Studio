@@ -9,13 +9,12 @@
  *    Atul Swain's portfolio (github.com/AtulSwain).
  */
 
-import investiqCover from "../projects/investiq.webp";
 import lgCover from "../projects/langgraph-cover.webp";
 import lgStudy from "../projects/langgraph-study-guide.webp";
 import lgLesson from "../projects/langgraph-lesson-3d.webp";
 import lgPatterns from "../projects/langgraph-patterns.webp";
 import lgArch from "../projects/langgraph-architecture.webp";
-import otakuvaMark from "../projects/otakuva-mark.webp";
+import webspaceCover from "../projects/webspace.webp";
 
 export const SITE = {
   name: "IMENIT Technologies",
@@ -49,7 +48,7 @@ export const NAV = [
 /* ---------------------------------------------------------------- Projects */
 
 export type Shot = { src: string; alt: string; caption?: string };
-export type Status = "Live" | "In development";
+export type Status = "Live" | "In use" | "Open source" | "In development";
 
 export type Project = {
   slug: string;
@@ -80,72 +79,6 @@ export type Project = {
 };
 
 export const PROJECTS: Project[] = [
-  {
-    slug: "otakuva",
-    name: "OTAKUVA",
-    category: "Community platform",
-    year: "2026",
-    status: "In development",
-    tagline: "A personal anime life archive.",
-    summary:
-      "An editorial home for the anime you watch, the people and studios behind it, and your own viewing history — with discovery, schedules, a personal library, community threads and real-time chat.",
-    role: "Product, design and engineering",
-    cover: { src: otakuvaMark, alt: "OTAKUVA brand mark — a silver brush-stroke arch" },
-    coverStyle: "mark",
-    stack: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Socket.IO", "JWT", "Cloudflare R2"],
-    links: {},
-    problem:
-      "Anime fans keep their history in trackers that feel like spreadsheets, discover new titles somewhere else and talk about them in a third place. Nothing ties the archive, the information and the community together.",
-    objective:
-      "Build one place that combines a personal archive, deep information about every title, studio and person, and a community — with an editorial, cinematic feel rather than a dashboard.",
-    approach:
-      "Every screen is designed against five rules: content over containers, information over decoration, typography over borders, spacing over UI chrome, hierarchy over card density. Data from Jikan (MyAnimeList) and AniList passes through an ingestion layer so every anime, studio, person, episode and news item is cross-linked.",
-    features: [
-      "Anime dossier pages with credits, cast, schedule and production timeline",
-      "Explore by type, genre, year, season, studio, score and rating, plus a release calendar",
-      "A personal library — watching, completed, plan to watch — with films treated as first-class",
-      "Community threads, direct messages and a live chat room per title over Socket.IO",
-      "Reviews with replies and tags, user articles, shareable lists and a creator mode",
-    ],
-    tradeoffs:
-      "Two external data providers disagree in places, so normalising them took priority over new features. Real-time chat brings moderation responsibilities, which is why moderation tools are planned before public rooms open widely.",
-    next: "Finishing the row-based editorial redesign, personalised discovery and moderation tools for public chat rooms.",
-    note: "Private repository — screenshots will be added at launch.",
-  },
-  {
-    slug: "investiq",
-    name: "InvestIQ",
-    category: "Market research platform",
-    year: "2026",
-    status: "Live",
-    tagline: "A research terminal that shows its working.",
-    summary:
-      "A stock-research terminal for Indian (NSE/BSE) and US markets where every metric shows its source, period, currency and whether it is reported, estimated or calculated.",
-    role: "Design, data and engineering",
-    cover: { src: investiqCover, alt: "InvestIQ research dashboard with market indices, watchlist and sector performance" },
-    coverStyle: "screenshot",
-    stack: ["Python", "FastAPI", "pandas", "NumPy", "yfinance", "Claude API", "pytest"],
-    links: { live: "https://atulswain.github.io/InvestIQ-AI/", code: "https://github.com/AtulSwain/InvestIQ-AI" },
-    facts: [
-      { value: "~45", label: "Metrics per company" },
-      { value: "10", label: "Risk dimensions" },
-      { value: "2", label: "Markets covered" },
-    ],
-    problem:
-      "Retail investors jump between several sites to answer one question: is this stock worth it, and why did it just move? Numbers disagree, sources are hidden, and AI tools answer confidently without citing anything.",
-    objective:
-      "One research workflow — discover, research, compare, value, monitor, build a thesis — in which every number can be traced back to where it came from.",
-    approach:
-      "Provenance is a first-class feature: hover any value to see its source, period and whether it is reported or calculated. Market data comes from Yahoo Finance through yfinance, with an offline demo mode. AI answers are built on InvestIQ's own data first and cite numbered sources.",
-    features: [
-      "Around 45 metrics per company, a screener and side-by-side comparison of up to four stocks",
-      "Reverse DCF, scenarios and a 10-dimension risk profile with evidence",
-      "News classified into earnings, M&A, regulatory, insider and more, linked to that day's price move",
-      "AI research answers where every claim links to a numbered source",
-    ],
-    tradeoffs:
-      "Financial data is messy in ways that matter — currencies, fiscal years, restatements. Treating every number as a claim with a source made the product more trustworthy and the code easier to test, at the cost of more work per metric. It is a research tool, not investment advice.",
-  },
   {
     slug: "langgraph-universe",
     name: "LangGraph Universe",
@@ -214,12 +147,65 @@ export const PROJECTS: Project[] = [
       "The current release is covered by automated tests using a fake model server, but has not yet been run on Windows against a real model, microphone or voice. Wake-word listening, an installer and an encrypted database are planned, not built.",
     next: "Testing on real Windows hardware, then a packaged installer.",
   },
+  {
+    slug: "webspace",
+    name: "WebSpace",
+    category: "Real-time communication",
+    year: "2026",
+    status: "Open source",
+    tagline: "Private video calls, peer to peer.",
+    summary:
+      "Room-based video and voice calls with chat, typing indicators and screen sharing. The server only does signalling — audio and video flow directly between browsers over WebRTC.",
+    role: "Full-stack development",
+    cover: { src: webspaceCover, alt: "WebSpace “Private Video Call” screen with name and room ID fields" },
+    coverStyle: "screenshot",
+    stack: ["Node.js", "Express", "Socket.IO", "WebRTC", "JavaScript"],
+    links: { code: "https://github.com/AtulSwain/WebSpace" },
+    problem:
+      "A video call between two people shouldn't need an account, a database or a company sitting in the middle of the conversation.",
+    objective: "A small app where you pick a name and a room ID, share it with a friend, and talk — with nothing stored on a server.",
+    approach:
+      "Socket.IO joins people to a room and relays the WebRTC handshake: one browser sends an SDP offer, the other answers, and ICE candidates are exchanged until a direct path is found. After that, audio and video never touch the server.",
+    features: [
+      "Real-time video, voice and chat in private rooms",
+      "Screen sharing, mute and camera toggles",
+      "Typing indicators and connection status for both sides",
+      "No database and no accounts — privacy by design",
+    ],
+    tradeoffs:
+      "Networking is full of edge cases — permissions, NAT traversal, one side joining before the other. Keeping the server to signalling only keeps calls private, but means there is no recording or call history by design.",
+  },
+  {
+    slug: "invoicing",
+    name: "Vinayak Creation Invoicing",
+    category: "Business software",
+    year: "2026",
+    status: "In use",
+    tagline: "Software built around how a real shop works.",
+    summary:
+      "A web app for making GST tax invoices laid out exactly like the shop's paper pad, plus a one-click monthly report for the accountant. Works on a phone or a laptop.",
+    role: "Sole developer",
+    coverStyle: "type",
+    stack: ["Python", "Flask", "SQLite", "ReportLab", "openpyxl", "Waitress"],
+    links: { code: "https://github.com/AtulSwain/Invoice-system" },
+    problem:
+      "A small business wanted to stop writing GST invoices by hand — without changing how their invoices looked — and wanted the monthly numbers ready for their accountant.",
+    objective: "Invoices that print exactly like the paper pad they already used, with the least possible software to install, run or pay for.",
+    approach:
+      "Flask and SQLite, chosen deliberately: no database server to install or pay for, and backups are a file copy. PDFs are generated in pure Python, so it runs on Windows, Mac, Linux or a cheap host.",
+    features: [
+      "Invoices laid out exactly like the existing paper pad",
+      "Owner and worker roles with different permissions",
+      "Monthly Excel report for the accountant and PDF export for every invoice",
+      "Import of past ledger bills from a spreadsheet, and daily automatic backups",
+    ],
+    tradeoffs:
+      "Only five dependencies and one SQLite file keep it simple to run and back up, at the cost of features a larger system would have. The best software for a small business is often the simplest one that fits how it already works.",
+  },
 ];
 
 /** Smaller pieces of real work, shown as a compact list. */
 export const MORE_WORK = [
-  { name: "Vinayak Creation Invoicing", detail: "GST invoicing and monthly reports for a real shop", stack: "Flask · SQLite · ReportLab", href: "https://github.com/AtulSwain/Invoice-system" },
-  { name: "WebSpace", detail: "Private peer-to-peer video calls over WebRTC", stack: "Node.js · Socket.IO · WebRTC", href: "https://github.com/AtulSwain/WebSpace" },
   { name: "FlowDesk", detail: "Team workspace with manager and employee views", stack: "Express · Socket.IO · MySQL", href: "https://github.com/AtulSwain/Flow" },
   { name: "Berserk Archive", detail: "Fan encyclopedia with a modular full-stack foundation", stack: "React · FastAPI · PostgreSQL", href: "https://github.com/AtulSwain/BerserkFanMadeClub" },
 ];
