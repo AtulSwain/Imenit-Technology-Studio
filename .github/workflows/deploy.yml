@@ -1,19 +1,23 @@
-# Builds the site and publishes it to GitHub Pages.
-# One-time setup: repo Settings → Pages → Source: "GitHub Actions".
-name: Deploy to GitHub Pages
+# Keeps the published website in sync with the source code.
+#
+# GitHub Pages is set to "Deploy from a branch → main / (root)", which serves files as-is.
+# This workflow rebuilds the site whenever source changes on main and commits the finished
+# files (index.html + assets/) to the repository root, where Pages picks them up.
+name: Build website
 
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "index.html"
+      - "assets/**"
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: build-site
   cancel-in-progress: true
 
 jobs:
@@ -27,16 +31,14 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Commit the built site if it changed
+        run: |
+          git add -A index.html assets
+          if git diff --cached --quiet; then
+            echo "Built site is already up to date."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Rebuild website"
+            git push
+          fi

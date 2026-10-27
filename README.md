@@ -15,20 +15,19 @@ A black-and-white studio website with a live 3D background, built with:
 ```bash
 npm install
 npm run dev       # local dev server
-npm run build     # type-check + production build into dist/
+npm run build     # type-check + production build into the repo root (index.html + assets/)
 npm run preview   # serve the production build
 ```
 
-`dist/` is a static site: deploy it to Vercel, Netlify, GitHub Pages or any static host.
+Source code lives in `src/` (entry: `src/index.html`). The **built website** is the root
+`index.html` + `assets/` — generated files, don't edit them by hand.
 
-> **Seeing a white page?** This is a React app — opening `index.html` directly (double-click, or from
-> GitHub's file view) shows a blank page because the code must be built and served. Use `npm run dev`
-> locally, or a deployed link.
+**Live site:** https://atulswain.github.io/Imenit-Technology-Studio/
+GitHub Pages setting: **Deploy from a branch → `main` / `(root)`**.
+`.github/workflows/deploy.yml` rebuilds the site automatically whenever source code on `main`
+changes and commits the fresh build, so Pages always serves the latest version.
 
-**GitHub Pages (automatic):** `.github/workflows/deploy.yml` builds and publishes on every push to `main`.
-One-time setup: repository **Settings → Pages → Source: GitHub Actions**.
-
-**Vercel / Netlify:** import the repo — build command `npm run build`, output folder `dist`.
+**Vercel / Netlify:** import the repo — build command `npm run build`, output folder `.` (root).
 
 ### Contact form
 
