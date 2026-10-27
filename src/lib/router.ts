@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 
 /**
  * Tiny hash router — works on GitHub Pages (no server rewrites needed),
@@ -20,8 +21,28 @@ export function useRoute() {
   const [route, setRoute] = useState<Route>(() =>
     typeof window === "undefined" ? { page: "home" } : parseHash(window.location.hash),
   );
+  const current = useRef(route);
+  current.current = route;
+
   useEffect(() => {
-    const onChange = () => setRoute(parseHash(window.location.hash));
+    const onChange = () => {
+      const next = parseHash(window.location.hash);
+      const prev = current.current;
+      const pageChanged = prev.page !== next.page || (prev.page === "case" && next.page === "case" && prev.slug !== next.slug);
+
+      // Swap the page and set its scroll position in one step, so a transition captures the final state.
+      const apply = () => {
+        flushSync(() => setRoute(next));
+        if (next.page === "case") window.scrollTo(0, 0);
+        else if (next.section) scrollToSection(next.section, true);
+        else if (pageChanged) window.scrollTo(0, 0);
+      };
+
+      // Smooth page transition (View Transitions API) where supported; instant otherwise.
+      const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+      if (pageChanged && doc.startViewTransition && !reduceMotion()) doc.startViewTransition(apply);
+      else apply();
+    };
     window.addEventListener("hashchange", onChange);
     return () => window.removeEventListener("hashchange", onChange);
   }, []);

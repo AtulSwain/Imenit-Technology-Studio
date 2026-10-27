@@ -38,6 +38,7 @@ export function Footer() {
           </ul>
         </div>
       </div>
+      <div className="container footer__mark" aria-hidden data-reveal><Logo compact /></div>
       <div className="container footer__base">
         <p>© {year} {SITE.name}. All rights reserved.</p>
         <p className="mono">Designed and built in-house</p>

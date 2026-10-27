@@ -4,6 +4,9 @@ import { caseHref } from "../lib/router";
 import { ProjectCover } from "./ProjectCover";
 import { SectionHead } from "./SectionHead";
 
+/** Shared element name: the cover morphs into the case-study header during the page transition. */
+export const vt = (slug: string) => ({ viewTransitionName: `cover-${slug}` }) as React.CSSProperties;
+
 export function Work() {
   return (
     <section className="section work" id="work" aria-labelledby="work-title">
@@ -19,14 +22,14 @@ export function Work() {
         <ol className="projects">
           {PROJECTS.map((p, i) => (
             <li className={`project${i % 2 ? " project--flip" : ""}`} key={p.slug} data-reveal>
-              <a className="project__media" href={caseHref(p.slug)} tabIndex={-1} aria-hidden>
+              <a className="project__media" href={caseHref(p.slug)} tabIndex={-1} aria-hidden style={vt(p.slug)}>
                 <ProjectCover project={p} />
               </a>
               <div className="project__body">
+                <span className="project__index" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
                 <div className="project__meta mono">
-                  <span>{String(i + 1).padStart(2, "0")}</span>
                   <span>{p.category}</span>
-                  <span className={`status${p.status === "Live" ? " status--live" : ""}`}>{p.status}</span>
+                  <span className={`status${p.status !== "In development" ? " status--live" : ""}`}>{p.status}</span>
                 </div>
                 <h3 className="project__name">
                   <a href={caseHref(p.slug)}>{p.name}</a>

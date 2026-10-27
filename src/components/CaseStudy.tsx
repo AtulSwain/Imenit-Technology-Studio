@@ -3,6 +3,8 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, CodeXml } from "lucide-react";
 import { PROJECTS, SITE } from "../lib/content";
 import { caseHref } from "../lib/router";
 import { ProjectCover } from "./ProjectCover";
+import { vt } from "./Work";
+import { CountUp } from "./CountUp";
 
 /** A dedicated case-study page at #/work/<slug>. Sections appear only when there is real content for them. */
 export function CaseStudy({ slug }: { slug: string }) {
@@ -35,7 +37,7 @@ export function CaseStudy({ slug }: { slug: string }) {
         <a className="link link--quiet case__back" href="#work"><ArrowLeft aria-hidden size={16} strokeWidth={1.6} /> All work</a>
         <p className="mono case__kicker">
           <span>{p.category}</span><span>{p.year}</span>
-          <span className={`status${p.status === "Live" ? " status--live" : ""}`}>{p.status}</span>
+          <span className={`status${p.status !== "In development" ? " status--live" : ""}`}>{p.status}</span>
         </p>
         <h1 id="case-title" className="case__title">{p.name}</h1>
         <p className="case__summary">{p.summary}</p>
@@ -54,25 +56,25 @@ export function CaseStudy({ slug }: { slug: string }) {
         </div>
       </header>
 
-      <div className="container case__media"><ProjectCover project={p} eager /></div>
+      <div className="container case__media"><div style={vt(p.slug)}><ProjectCover project={p} eager /></div></div>
 
       <div className="container">
         <dl className="case__facts">
           <div><dt className="mono">Role</dt><dd>{p.role}</dd></div>
           <div><dt className="mono">Status</dt><dd>{p.status}</dd></div>
           <div><dt className="mono">Stack</dt><dd>{p.stack.join(", ")}</dd></div>
-          {p.facts?.map((f) => <div key={f.label}><dt className="mono">{f.label}</dt><dd className="case__num">{f.value}</dd></div>)}
+          {p.facts?.map((f) => <div key={f.label}><dt className="mono">{f.label}</dt><dd className="case__num"><CountUp value={f.value} /></dd></div>)}
         </dl>
 
         <div className="case__sections">
           <CaseBlock n="01" title="The problem">{p.problem}</CaseBlock>
           <CaseBlock n="02" title="Objective">{p.objective}</CaseBlock>
           <CaseBlock n="03" title="Design and engineering approach">{p.approach}</CaseBlock>
-          <section className="case__block">
+          <section className="case__block" data-reveal>
             <h2 className="case__h"><span className="mono">04</span> Key features</h2>
             <ul className="case__list">{p.features.map((f) => <li key={f}>{f}</li>)}</ul>
           </section>
-          <section className="case__block">
+          <section className="case__block" data-reveal>
             <h2 className="case__h"><span className="mono">05</span> Technologies</h2>
             <ul className="tags">{p.stack.map((s) => <li key={s}>{s}</li>)}</ul>
           </section>
@@ -83,7 +85,7 @@ export function CaseStudy({ slug }: { slug: string }) {
         {p.gallery && (
           <section className="case__gallery" aria-label="Screenshots">
             {p.gallery.map((g) => (
-              <figure key={g.src}>
+              <figure key={g.src} data-reveal>
                 <img src={g.src} alt={g.alt} width={1440} height={900} loading="lazy" decoding="async" />
                 {g.caption && <figcaption>{g.caption}</figcaption>}
               </figure>
@@ -104,7 +106,7 @@ export function CaseStudy({ slug }: { slug: string }) {
 
 function CaseBlock({ n, title, children }: { n: string; title: string; children: string }) {
   return (
-    <section className="case__block">
+    <section className="case__block" data-reveal>
       <h2 className="case__h"><span className="mono">{n}</span> {title}</h2>
       <p>{children}</p>
     </section>

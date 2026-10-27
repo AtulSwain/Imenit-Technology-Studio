@@ -29,7 +29,7 @@
 - GSAP, Lenis, three.js, R3F, drei → removed. Motion is CSS + one IntersectionObserver.
 - Preloader → removed. The home page is **pre-rendered to static HTML at build time** and hydrated.
 - All invented content → replaced with real projects and facts from the project repositories
-  (OTAKUVA, InvestIQ, LangGraph Universe, Green, plus four smaller projects) and Atul Swain's portfolio.
+  (LangGraph Universe, Green, WebSpace and Vinayak Creation Invoicing, plus smaller projects) and Atul Swain's portfolio.
 - Fake forms → one honest enquiry form: validates, has a honeypot, and either posts to a configured
   form service (shows success only after a 2xx response) or hands off to the visitor's email app without claiming anything was sent.
 - Three stylesheets → one tokenised design system (`src/styles/main.css`).
@@ -59,7 +59,17 @@ Lab scores are diagnostics; real-user Core Web Vitals should be confirmed after 
 
 ## 6. Open items for the owner
 
-- **Screenshots** for OTAKUVA (private) and Green (desktop app) — add to `src/projects/` when available.
+- **Screenshots** for Green (desktop app) and the invoicing app — add to `src/projects/` when available.
 - **Form service**: set `FORM_ENDPOINT` in `src/lib/content.ts` (e.g. a free Formspree form) to receive enquiries directly.
 - **Social profiles**: only GitHub is listed because it is the only verified one. Add LinkedIn etc. in `SOCIAL`.
 - **Budget ranges** in the form are a suggestion — adjust to how you price work.
+
+## 7. Update — motion and visual layer
+
+- InvestIQ and OTAKUVA removed from the site at the owner's request.
+- Added: View Transitions between home and case studies (project cover morphs into the case header),
+  masked headline reveal, drifting hero sculpture with orbit lines and pointer/scroll parallax,
+  capability ticker, CSS scroll-progress bar, section-heading wipes, project cover reveals, hover
+  states on services/values/steps, count-up facts, and a footer wordmark.
+- All motion uses transform / opacity / clip-path, is disabled for reduced-motion users, and never hides content without JavaScript.
+- Lighthouse after the update: desktop 100 · 100 · 100 · 100; mobile (gzip) performance 98, LCP 2.1 s, CLS 0.
