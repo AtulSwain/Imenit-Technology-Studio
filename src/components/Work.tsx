@@ -1,11 +1,13 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
 import { PROJECTS } from "../lib/content";
-import { Art } from "./ui";
+import { useUI } from "../lib/ui";
+import { Arrow, Art } from "./ui";
 
 /** Pinned section that scrolls sideways on desktop; stacks vertically on small screens. */
 export function Work() {
   const root = useRef<HTMLElement>(null);
+  const { openProject } = useUI();
   const track = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -47,17 +49,22 @@ export function Work() {
       <div className="work__pin">
         <div className="work__track" ref={track}>
           <div className="work__intro">
-            <p className="eyebrow">Selected Work</p>
+            <p className="eyebrow eyebrow--index"><span className="eyebrow__i">(04)</span><span className="eyebrow__line" aria-hidden /><span>Selected Work</span></p>
             <h2 className="h2 work__title">Products that <em>move</em> people.</h2>
-            <p className="muted">A glimpse of what we have designed, engineered and launched.</p>
+            <p className="muted">A glimpse of what we have designed, engineered and launched. Open any project for the full case study.</p>
             <div className="work__drag"><span /> Scroll to explore</div>
           </div>
           {PROJECTS.map((p, i) => (
-            <a className="project" href="#contact" data-cursor="View" key={p.title}>
-              <div className="project__media"><Art kind={p.art} /></div>
-              <div className="project__meta"><span>{String(i + 1).padStart(2, "0")}</span><span>{p.category}</span></div>
-              <h3 className="project__title">{p.title}</h3>
-            </a>
+            <button className="project" type="button" data-cursor="Open" key={p.title} onClick={() => openProject(i)} aria-label={`Open case study: ${p.title}`}>
+              <span className="project__media">
+                <Art kind={p.art} />
+                <span className="project__badge">{p.results[0].value} <small>{p.results[0].label}</small></span>
+                <span className="project__open" aria-hidden>View case study <Arrow className="" diagonal /></span>
+              </span>
+              <span className="project__meta"><span>{String(i + 1).padStart(2, "0")} — {p.year}</span><span>{p.category}</span></span>
+              <span className="project__title">{p.title}</span>
+              <span className="project__summary">{p.summary}</span>
+            </button>
           ))}
         </div>
       </div>

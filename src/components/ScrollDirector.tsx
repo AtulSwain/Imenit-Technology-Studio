@@ -4,6 +4,9 @@ import { SCENE_POSES } from "../lib/content";
 import { sceneState } from "../lib/sceneState";
 import { scramble } from "../lib/scramble";
 
+// sections without their own nav item highlight the closest one
+const NAV_ALIAS: Record<string, string> = { why: "about", process: "work", cta: "contact" };
+
 /**
  * Page-wide motion that spans sections. Rendered LAST so its ScrollTriggers are
  * created after the pinned Work section and account for its pin spacing.
@@ -28,7 +31,7 @@ export function ScrollDirector({ onActive }: { onActive: (id: string) => void })
     gsap.utils.toArray<HTMLElement>("main section[id]").forEach((sec) => {
       ScrollTrigger.create({
         trigger: sec, start: "top 50%", end: "bottom 50%",
-        onToggle: (self) => { if (self.isActive) onActive(sec.id === "process" ? "about" : sec.id); },
+        onToggle: (self) => { if (self.isActive) onActive(NAV_ALIAS[sec.id] ?? sec.id); },
       });
     });
 

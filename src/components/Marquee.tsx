@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "../lib/gsap";
 import { sceneState } from "../lib/sceneState";
+import { TECH } from "../lib/content";
 
 type Item = { text: string; outline?: boolean };
 
@@ -46,9 +47,28 @@ function Row({ items, sep, dir }: { items: Item[]; sep: string; dir: 1 | -1 }) {
   );
 }
 
+/** Small, continuously scrolling list of technologies (pure CSS animation, pauses on hover). */
+function TechStrip() {
+  return (
+    <div className="tech" aria-label="Technologies we work with">
+      <span className="tech__label">Our stack</span>
+      <div className="tech__viewport">
+        <div className="tech__track">
+          {[0, 1].map((k) => (
+            <div className="tech__group" key={k} aria-hidden={k > 0}>
+              {TECH.map((t) => <span key={t}>{t}</span>)}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Marquee() {
   return (
     <section className="marquee" aria-label="What we do">
+      <TechStrip />
       <Row
         dir={1}
         sep="✦"

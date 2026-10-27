@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP, hasFinePointer } from "../lib/gsap";
 import { POSTS, type ArtKind } from "../lib/content";
-import { Arrow, Art, SplitWords } from "./ui";
+import { useUI } from "../lib/ui";
+import { Arrow, Art, Eyebrow, SplitWords } from "./ui";
 
 /** Floating preview that follows the cursor while hovering a post. */
 function usePreview(preview: React.RefObject<HTMLDivElement | null>) {
@@ -27,6 +28,7 @@ export function Blog() {
   const root = useRef<HTMLElement>(null);
   const preview = useRef<HTMLDivElement>(null);
   const [art, setArt] = useState<ArtKind>("rings");
+  const { openPost } = useUI();
   usePreview(preview);
 
   const show = (kind: ArtKind) => {
@@ -46,23 +48,28 @@ export function Blog() {
       <div className="container">
         <div className="blog__head">
           <div>
-            <p className="eyebrow" data-reveal>Insights</p>
+            <Eyebrow index="06">Insights</Eyebrow>
             <h2 className="h2" data-words><SplitWords text="Latest from the Blog" /></h2>
           </div>
-          <a href="#blog" className="link-arrow" data-reveal data-magnetic>
-            <span data-scramble>All articles</span><Arrow className="" />
-          </a>
+          <p className="muted" data-reveal>Notes from the studio on building products with AI, code and design.</p>
         </div>
 
         <ul className="posts">
-          {POSTS.map((p) => (
+          {POSTS.map((p, i) => (
             <li key={p.title}>
-              <a className="post" href="#blog" data-cursor="Read" onPointerEnter={() => show(p.art)} onPointerLeave={hide}>
+              <button
+                type="button"
+                className="post"
+                data-cursor="Read"
+                onPointerEnter={() => show(p.art)}
+                onPointerLeave={hide}
+                onClick={() => { hide(); openPost(i); }}
+              >
                 <span className="post__date">{p.date}</span>
                 <span className="post__title">{p.title}</span>
-                <span className="post__cat">{p.category}</span>
+                <span className="post__cat">{p.category} · {p.read}</span>
                 <Arrow className="post__arrow" diagonal />
-              </a>
+              </button>
             </li>
           ))}
         </ul>

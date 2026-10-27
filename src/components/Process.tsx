@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
 import { STEPS } from "../lib/content";
-import { SplitWords } from "./ui";
+import { Eyebrow, SplitWords } from "./ui";
 
 export function Process() {
   const root = useRef<HTMLElement>(null);
@@ -20,7 +20,7 @@ export function Process() {
     <section className="process section" id="process" ref={root}>
       <div className="container">
         <div className="process__head">
-          <p className="eyebrow" data-reveal>How We Work</p>
+          <Eyebrow index="05">How We Work</Eyebrow>
           <h2 className="h2" data-words><SplitWords text="From spark to" /> <span className="wm"><em className="wi">scale.</em></span></h2>
         </div>
         <ol className="steps">

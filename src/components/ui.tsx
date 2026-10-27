@@ -34,6 +34,17 @@ export function SplitWords({ text }: { text: string }) {
   );
 }
 
+/** Numbered section label, e.g. "(01) — Our Services". */
+export function Eyebrow({ index, children }: { index?: string; children: React.ReactNode }) {
+  return (
+    <p className="eyebrow eyebrow--index" data-reveal>
+      {index && <span className="eyebrow__i">({index})</span>}
+      {index && <span className="eyebrow__line" aria-hidden />}
+      <span>{children}</span>
+    </p>
+  );
+}
+
 export function Arrow({ className = "btn__arrow", diagonal = false }: { className?: string; diagonal?: boolean }) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden>

@@ -21,6 +21,21 @@ npm run preview   # serve the production build
 
 `dist/` is a static site: deploy it to Vercel, Netlify, GitHub Pages or any static host.
 
+> **Seeing a white page?** This is a React app — opening `index.html` directly (double-click, or from
+> GitHub's file view) shows a blank page because the code must be built and served. Use `npm run dev`
+> locally, or a deployed link.
+
+**GitHub Pages (automatic):** `.github/workflows/deploy.yml` builds and publishes on every push to `main`.
+One-time setup: repository **Settings → Pages → Source: GitHub Actions**.
+
+**Vercel / Netlify:** import the repo — build command `npm run build`, output folder `dist`.
+
+### Contact form
+
+The form works without a server: it opens the visitor's email app with the message pre-filled.
+To receive messages directly instead, create a free form endpoint (e.g. Formspree) and set
+`CONTACT_FORM_ENDPOINT` in `src/lib/content.ts`.
+
 ### Structure
 
 ```
@@ -48,7 +63,14 @@ src/
 - Scroll-filled statement, counting stats, pinned horizontal Work gallery, cursor-following blog previews.
 - Respects `prefers-reduced-motion`; falls back to a static background without WebGL.
 
+### Links never leave the page
+
+In-page links scroll smoothly (long jumps use a quick curtain transition) and never change the URL,
+projects open a full case-study sheet, articles open a reading drawer, the email address copies
+to the clipboard, and external links open in a new tab. An error boundary shows a styled
+message instead of a blank page if anything fails, and the site keeps working without WebGL.
+
 ### Placeholder content to replace
 
-Stats, project names, blog posts, social links and the contact email are placeholders —
-update them in `src/lib/content.ts`.
+Stats, case studies (names, numbers, text), blog articles, social links, phone, location and the
+contact email are placeholders — update them in `src/lib/content.ts`.

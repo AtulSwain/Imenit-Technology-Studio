@@ -50,6 +50,37 @@ export function onScroll(fn: ScrollListener) {
 export function stopScroll() { lenis?.stop(); document.body.style.overflow = lenis ? "" : "hidden"; }
 export function startScroll() { lenis?.start(); document.body.style.overflow = ""; }
 
+/**
+ * Navigate to a section. Short distances glide; long jumps play a quick black "curtain"
+ * wipe, jump instantly underneath it, then reveal — so the visitor never sees a blur of content.
+ */
+let navLockUntil = 0;
+/** True while a menu/link-driven scroll is running (the header stays visible during it). */
+export const isNavigating = () => performance.now() < navLockUntil;
+
+export function navigateTo(target: string | number | HTMLElement) {
+  navLockUntil = performance.now() + 2200;
+  const el = typeof target === "string" ? document.querySelector<HTMLElement>(target) : typeof target === "number" ? null : target;
+  const destY = typeof target === "number" ? target : el ? el.getBoundingClientRect().top + window.scrollY : window.scrollY;
+  const distance = Math.abs(destY - window.scrollY);
+  const curtain = document.querySelector<HTMLElement>(".curtain");
+
+  if (!curtain || prefersReducedMotion() || distance < window.innerHeight * 2.5) {
+    scrollToTarget(target);
+    return;
+  }
+  gsap.timeline()
+    .set(curtain, { display: "block" })
+    .fromTo(curtain, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.55, ease: "expo.inOut" })
+    .call(() => {
+      if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+      else window.scrollTo(0, destY);
+      ScrollTrigger.update();
+    })
+    .to(curtain, { clipPath: "inset(0 0 100% 0)", duration: 0.75, ease: "expo.inOut", delay: 0.12 })
+    .set(curtain, { display: "none" });
+}
+
 export function scrollToTarget(target: string | number | HTMLElement) {
   if (lenis) {
     lenis.scrollTo(target, { duration: 1.6, easing: (t: number) => 1 - Math.pow(1 - t, 4) });

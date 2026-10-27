@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, useGSAP, hasFinePointer, prefersReducedMotion } from "../lib/gsap";
 import { SERVICES } from "../lib/content";
-import { Arrow, ServiceIconSvg, SplitWords } from "./ui";
+import { Arrow, Eyebrow, ServiceIconSvg, SplitWords } from "./ui";
 
 /** Spotlight that follows the pointer + subtle 3D tilt. */
 function useCardFx(card: React.RefObject<HTMLElement | null>) {
@@ -35,6 +35,7 @@ function Card({ s, i, active, onSelect }: { s: (typeof SERVICES)[number]; i: num
       <ServiceIconSvg icon={s.icon} />
       <h3>{s.title}</h3>
       <p>{s.text}</p>
+      <ul className="card__points">{s.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
       <ul className="card__tags">{s.tags.map((t) => <li key={t}>{t}</li>)}</ul>
     </article>
   );
@@ -112,7 +113,7 @@ export function Services() {
     <section className="services section" id="services" ref={root}>
       <div className="container services__grid">
         <div className="services__intro">
-          <p className="eyebrow" data-reveal>Our Services</p>
+          <Eyebrow index="01">Our Services</Eyebrow>
           <h2 className="h2" data-words><SplitWords text="What We Do" /></h2>
           <p className="muted" data-reveal>From idea to execution, we craft technology that solves real problems and drives meaningful results.</p>
           <a href="#contact" className="link-arrow" data-reveal data-magnetic>
